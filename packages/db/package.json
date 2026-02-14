@@ -9,7 +9,7 @@
     "lint": "eslint src --ext .ts",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests",
-    "prisma:generate": "prisma generate --schema ../../apps/bot/prisma/schema.prisma"
+    "prisma:generate": "prisma generate --config ../../apps/bot/prisma.config.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.1.0"

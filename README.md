@@ -9,7 +9,7 @@ Kanbal is a production-focused, English-only Discord bot built with TypeScript a
 - Automod + anti-raid baseline protections
 - Utility systems (welcome/leave, tickets, suggestions, custom commands, autoroles, reaction role persistence)
 - Community systems (XP leveling, leaderboard, reminders)
-- Prisma-backed data layer (SQLite by default, PostgreSQL supported)
+- Prisma-backed data layer (SQLite)
 - Structured pino logging, correlation IDs, and metrics-ready interfaces
 - Sharding-ready runner abstraction
 
@@ -33,13 +33,15 @@ pnpm --filter @kanbal/bot deploy:commands
 pnpm --filter @kanbal/bot start
 ```
 
+## Prisma Configuration
+- Connection URL is defined via `DATABASE_URL` in `apps/bot/prisma.config.ts`.
+- Datasource provider is fixed as `sqlite` in `apps/bot/prisma/schema.prisma`.
+
 ## Environment Variables
 - `DISCORD_TOKEN`: Bot token
 - `CLIENT_ID`: Discord application client ID
 - `DATABASE_URL`: Prisma connection string
   - SQLite local default: `file:./apps/bot/prisma/dev.db`
-  - PostgreSQL example: `postgresql://user:pass@localhost:5432/kanbal`
-- `DATABASE_PROVIDER`: `sqlite` (default local) or `postgresql`
 - `LOG_LEVEL`: `fatal|error|warn|info|debug|trace`
 - `NODE_ENV`: `development|test|production`
 
@@ -63,7 +65,6 @@ All module messages and responses are centralized in `apps/bot/src/messages` for
 - Invite with required privileged intents (Message Content and Guild Members as needed).
 - Ensure role hierarchy permits moderation actions.
 - The runner supports single process today and is ready to expand into shard runners.
-- Use PostgreSQL for production workloads.
 
 ## Workspace Scripts
 - `pnpm -r lint`
