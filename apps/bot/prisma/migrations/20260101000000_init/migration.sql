@@ -1,0 +1,1 @@
+-- Initial Kanbal schema is managed by Prisma migration engine.
