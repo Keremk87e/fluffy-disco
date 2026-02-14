@@ -9,7 +9,7 @@ Kanbal is a production-focused, English-only Discord bot built with TypeScript a
 - Automod + anti-raid baseline protections
 - Utility systems (welcome/leave, tickets, suggestions, custom commands, autoroles, reaction role persistence)
 - Community systems (XP leveling, leaderboard, reminders)
-- Prisma-backed data layer (SQLite by default, PostgreSQL supported)
+- Prisma-backed data layer (SQLite by default, PostgreSQL supported via alternate schema)
 - Structured pino logging, correlation IDs, and metrics-ready interfaces
 - Sharding-ready runner abstraction
 
@@ -42,6 +42,8 @@ pnpm --filter @kanbal/bot start
 - `DATABASE_PROVIDER`: `sqlite` (default local) or `postgresql`
 - `LOG_LEVEL`: `fatal|error|warn|info|debug|trace`
 - `NODE_ENV`: `development|test|production`
+
+Prisma provider is selected by script: SQLite uses `schema.prisma`, PostgreSQL uses `schema.postgresql.prisma`.
 
 ## Commands and Modules
 - `/moderation ...`

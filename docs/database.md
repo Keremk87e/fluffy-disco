@@ -1,6 +1,8 @@
 # Database
 
-Prisma schema: `apps/bot/prisma/schema.prisma`
+Prisma schemas:
+- SQLite: `apps/bot/prisma/schema.prisma`
+- PostgreSQL: `apps/bot/prisma/schema.postgresql.prisma`
 
 ## Main Models
 - `GuildSettings`
@@ -22,4 +24,4 @@ pnpm --filter @kanbal/bot prisma:migrate
 pnpm --filter @kanbal/db prisma:generate
 ```
 
-Use SQLite locally, PostgreSQL in production by setting env vars.
+Use SQLite locally, PostgreSQL in production by setting `DATABASE_PROVIDER=postgresql` and a PostgreSQL `DATABASE_URL`. Prisma runner scripts automatically select the matching schema file.

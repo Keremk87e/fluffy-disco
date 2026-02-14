@@ -22,6 +22,13 @@ const loadDotEnv = (filePath) => {
   }
 };
 
+const resolveSchemaPath = (inputPath, provider) => {
+  const normalizedProvider = provider?.toLowerCase() === 'postgresql' ? 'postgresql' : 'sqlite';
+  if (normalizedProvider !== 'postgresql') return inputPath;
+  if (!inputPath.endsWith('schema.prisma')) return inputPath;
+  return inputPath.replace(/schema\.prisma$/u, 'schema.postgresql.prisma');
+};
+
 loadDotEnv(envPath);
 
 if (!process.env.DATABASE_PROVIDER) {
@@ -31,7 +38,12 @@ if (!process.env.DATABASE_URL) {
   process.env.DATABASE_URL = 'file:./dev.db';
 }
 
-const args = process.argv.slice(2);
+const args = [...process.argv.slice(2)];
+const schemaIndex = args.findIndex((arg) => arg === '--schema');
+if (schemaIndex >= 0 && args[schemaIndex + 1]) {
+  args[schemaIndex + 1] = resolveSchemaPath(args[schemaIndex + 1], process.env.DATABASE_PROVIDER);
+}
+
 const child = spawn('prisma', args, {
   stdio: 'inherit',
   shell: process.platform === 'win32',
