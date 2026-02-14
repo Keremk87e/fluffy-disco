@@ -1,0 +1,11 @@
+node_modules
+.env
+.env.*
+!.env.example
+dist
+coverage
+.vscode
+.DS_Store
+pnpm-lock.yaml
+apps/bot/prisma/dev.db
+apps/bot/prisma/dev.db-journal

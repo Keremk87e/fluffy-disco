@@ -1,0 +1,179 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = env("DATABASE_PROVIDER")
+  url      = env("DATABASE_URL")
+}
+
+model GuildSettings {
+  guildId               String   @id
+  logChannelId          String?
+  welcomeChannelId      String?
+  leaveChannelId        String?
+  welcomeTemplate       String?
+  leaveTemplate         String?
+  suggestionsChannelId  String?
+  ticketCategoryId      String?
+  ticketSupportRoleId   String?
+  automodEnabled        Boolean  @default(true)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  featureFlags          FeatureFlag[]
+  automodRules          AutomodRule[]
+  customCommands        CustomCommand[]
+  reactionRoles         ReactionRole[]
+  autoroles             Autorole[]
+  reminders             Reminder[]
+}
+
+model FeatureFlag {
+  id        String   @id @default(cuid())
+  guildId   String
+  module    String
+  enabled   Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  guild GuildSettings @relation(fields: [guildId], references: [guildId], onDelete: Cascade)
+
+  @@unique([guildId, module])
+  @@index([guildId])
+}
+
+model ModerationCase {
+  id            String   @id @default(cuid())
+  guildId       String
+  caseNumber    Int
+  action        String
+  actorId       String
+  targetId      String
+  reason        String?
+  metadata      String?
+  createdAt     DateTime @default(now())
+
+  warnings Warning[]
+
+  @@unique([guildId, caseNumber])
+  @@index([guildId, targetId])
+}
+
+model Warning {
+  id              String   @id @default(cuid())
+  guildId         String
+  targetId        String
+  actorId         String
+  reason          String?
+  moderationCaseId String?
+  createdAt       DateTime @default(now())
+
+  moderationCase ModerationCase? @relation(fields: [moderationCaseId], references: [id], onDelete: SetNull)
+
+  @@index([guildId, targetId])
+}
+
+model AutomodRule {
+  id          String   @id @default(cuid())
+  guildId     String
+  type        String
+  enabled     Boolean  @default(true)
+  configJson  String
+  action      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  guild GuildSettings @relation(fields: [guildId], references: [guildId], onDelete: Cascade)
+
+  @@unique([guildId, type])
+}
+
+model Ticket {
+  id           String   @id @default(cuid())
+  guildId      String
+  channelId    String   @unique
+  creatorId    String
+  status       String
+  transcript   String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([guildId, creatorId])
+}
+
+model CustomCommand {
+  id          String   @id @default(cuid())
+  guildId     String
+  trigger     String
+  response    String
+  isEmbed     Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  guild GuildSettings @relation(fields: [guildId], references: [guildId], onDelete: Cascade)
+
+  @@unique([guildId, trigger])
+}
+
+model GuildMemberXP {
+  id          String   @id @default(cuid())
+  guildId     String
+  userId      String
+  xp          Int      @default(0)
+  level       Int      @default(1)
+  lastGainAt  DateTime?
+
+  @@unique([guildId, userId])
+  @@index([guildId, xp])
+}
+
+model Reminder {
+  id          String   @id @default(cuid())
+  guildId     String
+  userId      String
+  remindAt    DateTime
+  content     String
+  createdAt   DateTime @default(now())
+
+  guild GuildSettings @relation(fields: [guildId], references: [guildId], onDelete: Cascade)
+
+  @@index([userId, remindAt])
+}
+
+model ReactionRole {
+  id          String   @id @default(cuid())
+  guildId     String
+  messageId   String
+  channelId   String
+  roleId      String
+  label       String
+  createdAt   DateTime @default(now())
+
+  guild GuildSettings @relation(fields: [guildId], references: [guildId], onDelete: Cascade)
+
+  @@index([guildId, messageId])
+}
+
+model Autorole {
+  id          String   @id @default(cuid())
+  guildId     String
+  roleId      String
+  createdAt   DateTime @default(now())
+
+  guild GuildSettings @relation(fields: [guildId], references: [guildId], onDelete: Cascade)
+
+  @@unique([guildId, roleId])
+}
+
+model Suggestion {
+  id          String   @id @default(cuid())
+  guildId     String
+  authorId    String
+  channelId   String
+  messageId   String?  @unique
+  content     String
+  status      String   @default("open")
+  createdAt   DateTime @default(now())
+
+  @@index([guildId, channelId])
+}
