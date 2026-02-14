@@ -70,4 +70,8 @@ All module messages and responses are centralized in `apps/bot/src/messages` for
 - `pnpm -r typecheck`
 - `pnpm -r test`
 - `pnpm -r build`
+- `pnpm pr:doctor` (diagnose why PR creation/push can fail)
+
+## PR Troubleshooting
+If you cannot open a PR, run `pnpm pr:doctor`. It validates git remotes, commit state, GitHub CLI auth, and upstream branch tracking, then prints exact fixes.
 
