@@ -1,6 +1,7 @@
 # Database
 
 Prisma schema: `apps/bot/prisma/schema.prisma`
+Prisma config: `apps/bot/prisma.config.ts`
 
 ## Main Models
 - `GuildSettings`
@@ -22,4 +23,4 @@ pnpm --filter @kanbal/bot prisma:migrate
 pnpm --filter @kanbal/db prisma:generate
 ```
 
-Use SQLite locally, PostgreSQL in production by setting env vars.
+Use SQLite via `DATABASE_URL` (default: `file:./apps/bot/prisma/dev.db`).

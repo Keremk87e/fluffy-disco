@@ -15,7 +15,8 @@
     "format:check": "prettier --check .",
     "prepare": "husky",
     "prisma:generate": "pnpm --filter @kanbal/db prisma:generate",
-    "prisma:migrate": "pnpm --filter @kanbal/bot prisma:migrate"
+    "prisma:migrate": "pnpm --filter @kanbal/bot prisma:migrate",
+    "pr:doctor": "node scripts/pr-doctor.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
